@@ -6,33 +6,33 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:19:08 by kbarru            #+#    #+#             */
-/*   Updated: 2025/02/19 14:05:19 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/02/25 17:56:11 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void free_arr(char **arr)
+void	free_arr(char **arr)
 {
 	int	i;
 
 	i = -1;
 	if (!arr)
 		return ;
-	while(arr[++i])
+	while (arr[++i])
 		free(arr[i]);
 	free(arr);
 }
 
-void print_arr(char **arr)
+void	print_arr(char **arr)
 {
-	ft_printf("\n\n === ARRAY PRINTING ===\n\n");
-	int i;
+	int	i;
 
+	ft_printf("\n\n === ARRAY PRINTING ===\n\n");
 	i = -1;
 	if (!arr)
 		return ;
-	while(arr[++i])
+	while (arr[++i])
 		ft_printf("%s\n", arr[i]);
 	ft_printf("\n\n ==========\n\n");
 }
@@ -42,9 +42,9 @@ void print_arr(char **arr)
 	@param prefix the prefix to add.
 	@param s2 the string to add a prefix to.
 */
-void str_arr_suffix(char **arr, char *suffix)
+void	str_arr_suffix(char **arr, char *suffix)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (arr[++i])

@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:13:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/02/19 14:04:04 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/02/25 17:56:04 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	heap_add_suffix(const char *suffix, char **s1)
 	free(s1_dup);
 }
 
-
-void heap_add_prefix(const char *prefix, char *s2)
+void	heap_add_prefix(const char *prefix, char *s2)
 {
 	size_t	prefix_len;
 	size_t	s2_len;
@@ -68,21 +67,19 @@ void heap_add_prefix(const char *prefix, char *s2)
 	free(s2_dup);
 }
 
-
-char *concat(size_t n, ...)
+char	*concat(size_t n, ...)
 {
-	va_list lst;
+	va_list	lst;
 	size_t	i;
 	char	*string;
 
 	i = 0;
 	string = malloc(sizeof(char));
 	string[0] = '\0';
-
 	va_start(lst, n);
-	while(i < n)
+	while (i < n)
 	{
-		heap_add_suffix(va_arg(lst, char*), &string);
+		heap_add_suffix(va_arg(lst, char *), &string);
 		++i;
 	}
 	va_end(lst);
