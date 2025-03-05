@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:58:25 by kbarru            #+#    #+#             */
-/*   Updated: 2025/02/25 11:05:23 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/04 14:17:26 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,17 @@ char	*basename(char str[])
 	return (basename);
 }
 
-// char **tokenize(char str[])
-// {
+char	**tokenize(char str[])
+{
+	int		i;
+	char	**tokens;
 
-// }
+	tokens = ft_split(str, ' ');
+	i = 0;
+	while (tokens[i])
+	{
+		tokens[i] = ft_split(tokens[i], ' ');
+		++i;
+	}
+	return (tokens);
+}

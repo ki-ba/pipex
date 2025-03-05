@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:19:08 by kbarru            #+#    #+#             */
-/*   Updated: 2025/02/25 17:56:11 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/04 14:26:12 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,14 @@ void	str_arr_suffix(char **arr, char *suffix)
 	i = -1;
 	while (arr[++i])
 		heap_add_suffix(suffix, &(arr[i]));
+}
+
+int	get_arr_size(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+		++i;
+	return (i);
 }

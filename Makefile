@@ -10,7 +10,7 @@ P_OBJ = .obj/
 
 ### FILES
 
-SRC = parsing.c error.c main.c execution.c arr_utils.c str_utils.c
+SRC = parsing.c main.c execution.c arr_utils.c str_utils.c
 OBJ = $(addprefix $(P_OBJ), $(SRC:%.c=%.o))
 HEADER = pipex.h
 
