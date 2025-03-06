@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:19:08 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/04 14:26:12 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/06 20:25:18 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,20 @@ int	get_arr_size(char **arr)
 	while (arr[i])
 		++i;
 	return (i);
+}
+
+char **duplicate_arr(char **arr)
+{
+	int i;
+	int	size;
+	char **dup;
+
+	i = -1;
+	size = get_arr_size(arr);
+	dup = malloc(sizeof(char *) * (size + 1));
+	while (++i < size)
+		dup[i] = ft_strdup(arr[i]);
+	dup[i] = 0;
+
+	return (dup);
 }
