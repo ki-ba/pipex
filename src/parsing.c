@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:58:25 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/04 14:17:26 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/06 11:07:05 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*basename(char str[])
 	return (basename);
 }
 
-char	**tokenize(char str[])
+/* char	**tokenize(char str[])
 {
 	int		i;
 	char	**tokens;
@@ -46,4 +46,4 @@ char	**tokenize(char str[])
 		++i;
 	}
 	return (tokens);
-}
+} */

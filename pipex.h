@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:39:17 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/04 14:16:49 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/06 11:06:19 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,24 @@ typedef struct s_fdlist
 	int				fd;
 }					t_fdlist;
 
-// ERROR
-
-void				ft_clean_exit(int errno);
-
-// PARSING
+/* parsing.c */
 int					ft_is_non_empty(char str[]);
 char				*basename(char str[]);
 
-// EXECUTION
+/* execution.c */
 
 char				**extract_path(char *env[]);
 char				*find_path(char *command, char **path);
 int					try_exec(char **cmd, char *env[]);
 
-// ARR_UTILS
+/* arr_utils.c */
 
 void				free_arr(char **arr);
 void				print_arr(char **arr);
 void				str_arr_suffix(char **arr, char *suffix);
 char				**duplicate_arr(char **arr);
 
-// STR_UTILS
+/* str_utils.c */
 
 void				heap_add_suffix(const char *suffix, char **s1);
 void				heap_add_prefix(const char *prefix, char *s2);

@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/05 15:29:40 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/06 11:04:32 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int argc, char *argv[], char *env[])
 		return (ft_printf("usage : ./pipex <file1> <cmd1> <cmd2> <file2>\n"));
 	set_files(&infile, &outfile, argv[1], argv[argc - 1]);
 	dup2(infile, STDIN_FILENO);
-	while (argv[i + 1])
+	while (argv[i + 2])
 	{
 		if (pipe(pipe_fd) == -1)
 		{
@@ -78,5 +78,7 @@ int	main(int argc, char *argv[], char *env[])
 			++i;
 		}
 	}
+	dup2(outfile, STDOUT_FILENO);
+	create_linked_child(argv[i], env);
 	return (0);
 }

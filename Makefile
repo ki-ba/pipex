@@ -1,6 +1,6 @@
 NAME = pipex
 CC = cc
-FLAGS = -Wall -Wextra -g
+FLAGS = -Werror -Wall -Wextra -g
 DEBUG_FLAGS = -Wall -Wextra -g -fsanitize=address
 ### PATHS
 
