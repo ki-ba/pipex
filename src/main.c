@@ -6,20 +6,38 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/07 09:20:50 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 13:57:28 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <sys/wait.h>
 
-int	create_linked_child(char *line, char *env[])
+void	create_linked_child(char *line, char *env[], int last)
 {
 	char	**cmd;
+	int		child_pid;
+	int		pipe_fd[2];
 
 	cmd = ft_split(line, ' ');
-	try_exec(cmd, env);
-	exit(EXIT_FAILURE);
+	if (pipe(pipe_fd) == -1)
+		exit(EXIT_FAILURE);
+	child_pid = fork();
+	if (child_pid < 0)
+		exit(EXIT_FAILURE);
+	if (child_pid == 0)
+	{
+		close(pipe_fd[0]);
+		if (!last)
+			dup2(pipe_fd[1], STDOUT_FILENO);
+		try_exec(cmd, env);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		close(pipe_fd[1]);
+		dup2(pipe_fd[0], STDIN_FILENO);
+		waitpid(child_pid, NULL, 0);
+	}
 }
 
 void	set_files(int *infile, int *outfile, char *file1, char *file2)
@@ -37,6 +55,7 @@ void	set_files(int *infile, int *outfile, char *file1, char *file2)
 		exit(EXIT_FAILURE);
 	}
 }
+
 void	setup_pipex(t_pipex *pipex, int infile, int outfile, char *argv[])
 {
 	pipex->infile = infile;
@@ -45,50 +64,23 @@ void	setup_pipex(t_pipex *pipex, int infile, int outfile, char *argv[])
 	pipex->args = duplicate_arr(argv);
 	pipex->cmd_count = get_arr_size(argv);
 }
+
 int	main(int argc, char *argv[], char *env[])
 {
-	int	infile;
-	int outfile;
-	int	pipe_fd[2];
+	int		infile;
+	int		outfile;
 	t_pipex	pipex;
-	int	i;
+	int		i;
 
 	i = 2;
 	if (argc < 5)
 		return (ft_printf("usage : ./pipex <file1> <cmd1> <cmd2> <file2>\n"));
 	set_files(&infile, &outfile, argv[1], argv[argc - 1]);
 	setup_pipex(&pipex, infile, outfile, argv);
-	print_arr(pipex.cmd);
-	print_arr(pipex.args);
-	// dup2(infile, STDIN_FILENO);
-	// while (argv[i + 1])
-	// {
-	// 	if (pipe(pipe_fd) == -1)
-	// 	{
-	// 		perror("");
-	// 		return (1);
-	// 	}
-	// 	child_pid = fork();
-	// 	if (child_pid < 0)
-	// 		return (2);
-	// 	if (child_pid == 0)
-	// 	{
-	// 		dup2(pipe_fd[1], STDOUT_FILENO);
-	// 		close(pipe_fd[0]);
-	// 		close(pipe_fd[1]);
-	// 		create_linked_child(argv[i], env);
-	// 		exit(EXIT_FAILURE);
-	// 	}
-	// 	else
-	// 	{
-	// 		dup2(pipe_fd[0], STDIN_FILENO);
-	// 		close(pipe_fd[1]);
-	// 		close(pipe_fd[0]);
-	// 		waitpid(child_pid, NULL, 0);
-	// 		++i;
-	// 	}
-	// }
-	// dup2(outfile, STDOUT_FILENO);
-	// create_linked_child(argv[i], env);
+	dup2(infile, STDIN_FILENO);
+	while (i < argc - 2)
+		create_linked_child(argv[i++], env, 0);
+	dup2(outfile, STDOUT_FILENO);
+	create_linked_child(argv[argc - 2], env, 1);
 	return (0);
 }
