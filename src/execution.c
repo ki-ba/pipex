@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:01 by kbarru            #+#    #+#             */
-/*   Updated: 2025/02/25 17:56:27 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 14:48:09 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,12 @@ char	*find_path(char *command, char **path)
 	return (current_path);
 }
 
+/*
+ *	@brief tries to execute with execve() the cmd passed as a parameter.
+ *	@param cmd the command to execute with its args, as an array of strings.
+ *	@param env the environment variables as array of strings.
+ *	@returns nothing if the command was successfully executed, nonzero otherwise.
+*/
 int	try_exec(char **cmd, char *env[])
 {
 	char	**path;

@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:39:17 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/07 13:54:29 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 16:10:10 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include "libft.h"
 # include <sys/wait.h>
 
+# ifndef TMP_FILENAME_LENGTH
+#  define TMP_FILENAME_LENGTH 1
+# endif
 typedef struct s_pipex
 {
 	pid_t	infile;
