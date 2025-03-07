@@ -6,7 +6,11 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/03/06 11:04:32 by kbarru           ###   ########lyon.fr   */
+=======
+/*   Updated: 2025/03/06 20:30:25 by kbarru           ###   ########lyon.fr   */
+>>>>>>> a465a365f14d2eb642ed1442c9d3166b52cd1756
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +41,27 @@ void	set_files(int *infile, int *outfile, char *file1, char *file2)
 		exit(EXIT_FAILURE);
 	}
 }
-
+void	setup_pipex(t_pipex *pipex, int infile, int outfile, char *argv[])
+{
+	pipex->infile = infile;
+	pipex->outfile = outfile;
+	pipex->cmd = duplicate_arr(argv);
+	pipex->args = duplicate_arr(argv);
+	pipex->cmd_count = get_arr_size(argv);
+}
 int	main(int argc, char *argv[], char *env[])
 {
-	int	pipe_fd[2];
-	int	child_pid;
 	int	infile;
-	int	outfile;
+	int outfile;
+	int	pipe_fd[2];
+	t_pipex	pipex;
 	int	i;
 
 	i = 2;
 	if (argc < 5)
 		return (ft_printf("usage : ./pipex <file1> <cmd1> <cmd2> <file2>\n"));
 	set_files(&infile, &outfile, argv[1], argv[argc - 1]);
+<<<<<<< HEAD
 	dup2(infile, STDIN_FILENO);
 	while (argv[i + 2])
 	{
@@ -80,5 +92,40 @@ int	main(int argc, char *argv[], char *env[])
 	}
 	dup2(outfile, STDOUT_FILENO);
 	create_linked_child(argv[i], env);
+=======
+	setup_pipex(&pipex, infile, outfile, argv);
+	print_arr(pipex.cmd);
+	print_arr(pipex.args);
+	// dup2(infile, STDIN_FILENO);
+	// while (argv[i + 1])
+	// {
+	// 	if (pipe(pipe_fd) == -1)
+	// 	{
+	// 		perror("");
+	// 		return (1);
+	// 	}
+	// 	child_pid = fork();
+	// 	if (child_pid < 0)
+	// 		return (2);
+	// 	if (child_pid == 0)
+	// 	{
+	// 		dup2(pipe_fd[1], STDOUT_FILENO);
+	// 		close(pipe_fd[0]);
+	// 		close(pipe_fd[1]);
+	// 		create_linked_child(argv[i], env);
+	// 		exit(EXIT_FAILURE);
+	// 	}
+	// 	else
+	// 	{
+	// 		dup2(pipe_fd[0], STDIN_FILENO);
+	// 		close(pipe_fd[1]);
+	// 		close(pipe_fd[0]);
+	// 		waitpid(child_pid, NULL, 0);
+	// 		++i;
+	// 	}
+	// }
+	// dup2(outfile, STDOUT_FILENO);
+	// create_linked_child(argv[i], env);
+>>>>>>> a465a365f14d2eb642ed1442c9d3166b52cd1756
 	return (0);
 }

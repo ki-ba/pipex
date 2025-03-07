@@ -6,7 +6,11 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:39:17 by kbarru            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/03/06 11:06:19 by kbarru           ###   ########lyon.fr   */
+=======
+/*   Updated: 2025/03/06 20:29:42 by kbarru           ###   ########lyon.fr   */
+>>>>>>> a465a365f14d2eb642ed1442c9d3166b52cd1756
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +20,15 @@
 # include "fcntl.h"
 # include "libft.h"
 
-typedef struct s_fdlist
+typedef struct s_pipex
 {
-	struct s_fdlist	*next;
-	int				fd;
-}					t_fdlist;
+	pid_t	infile;
+	pid_t	outfile;
+
+	char	**cmd;
+	char	**args;
+	int		cmd_count;
+}			t_pipex;
 
 /* parsing.c */
 int					ft_is_non_empty(char str[]);
@@ -38,6 +46,7 @@ void				free_arr(char **arr);
 void				print_arr(char **arr);
 void				str_arr_suffix(char **arr, char *suffix);
 char				**duplicate_arr(char **arr);
+int					get_arr_size(char **arr);
 
 /* str_utils.c */
 
