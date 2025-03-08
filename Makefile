@@ -28,7 +28,8 @@ fclean: clean
 	$(MAKE) -C $(P_LIB) fclean
 	rm -rf $(NAME)
 
-re: fclean all
+re: fclean 
+	$(MAKE) all
 
 lib:
 	$(MAKE) -C $(P_LIB) all
@@ -36,7 +37,6 @@ lib:
 debug:
 	$(MAKE) re FLAGS="$(DEBUG_FLAGS)"
 	$(MAKE) clean
-	./$(NAME) file1 rev sort file2
 
 $(NAME): $(OBJ) $(P_LIB)libft.a
 	$(CC) $(FLAGS) $(OBJ) -L$(P_LIB) -lft -o $@

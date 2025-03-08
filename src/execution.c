@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:01 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/08 17:14:19 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/08 18:43:28 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,17 +112,17 @@ int	try_exec(char **cmd, char *env[])
 *	@param env the environment variables as an array of strings.
 *	@param last wether this is the last command to execute or not.
 */
-void	create_linked_child(char *line, char *env[], int last)
+void	create_linked_child(t_pipex *pipex, char *line, char *env[], int last)
 {
 	char	**cmd;
 	int		child_pid;
 	int		pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
-		exit(EXIT_FAILURE);
+		ft_clean_exit(pipex, EXIT_FAILURE);
 	child_pid = fork();
 	if (child_pid < 0)
-		exit(EXIT_FAILURE);
+		ft_clean_exit(pipex, EXIT_FAILURE);
 	if (child_pid == 0)
 	{
 		cmd = ft_split(line, ' ');
@@ -130,7 +130,7 @@ void	create_linked_child(char *line, char *env[], int last)
 		if (!last)
 			dup2(pipe_fd[1], STDOUT_FILENO);
 		try_exec(cmd, env);
-		exit(EXIT_FAILURE);
+		ft_clean_exit(pipex, EXIT_FAILURE);
 	}
 	else
 	{

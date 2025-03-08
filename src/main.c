@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/08 17:56:31 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/08 18:56:48 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,15 @@ int	set_files(t_pipex *pipex, int argc, char *argv[], t_bool here_doc)
 	if (here_doc == TRUE)
 	{
 		pipex->tmp_filename = create_random_str();
+		if (!(pipex->tmp_filename))
+			ft_clean_exit(pipex, EXIT_FAILURE);
 		pipex->infile = open(pipex->tmp_filename, O_CREAT | O_WRONLY, 0644);
 		pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND,
 				0644);
 	}
 	else
 	{
+		pipex->tmp_filename = NULL;
 		pipex->infile = open(argv[1], O_RDONLY);
 		pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC,
 				0644);
@@ -41,7 +44,7 @@ int	set_files(t_pipex *pipex, int argc, char *argv[], t_bool here_doc)
 	if (pipex->outfile < 0)
 		perror(argv[argc - 1]);
 	if (pipex->outfile < 0 || pipex->infile < 0)
-		exit(EXIT_FAILURE);
+		ft_clean_exit(pipex, EXIT_FAILURE);
 	return (0);
 }
 
@@ -71,7 +74,7 @@ void	here_doc(t_pipex *pipex, char *delimiter)
 	close(pipex->infile);
 	pipex->infile = open(pipex->tmp_filename, O_RDONLY);
 	if (pipex->infile < 0)
-		unlink(pipex->tmp_filename);
+		ft_clean_exit(pipex, EXIT_FAILURE);
 }
 
 int	main(int argc, char *argv[], char *env[])
@@ -89,9 +92,9 @@ int	main(int argc, char *argv[], char *env[])
 		here_doc(&pipex, argv[2]);
 	dup2(pipex.infile, STDIN_FILENO);
 	while (i < argc - 2)
-		create_linked_child(argv[i++], env, 0);
+		create_linked_child(&pipex, argv[i++], env, 0);
 	dup2(pipex.outfile, STDOUT_FILENO);
-	create_linked_child(argv[argc - 2], env, 1);
-	ft_clean(&pipex);
+	create_linked_child(&pipex, argv[argc - 2], env, 1);
+	ft_clean_exit(&pipex, EXIT_SUCCESS);
 	return (0);
 }

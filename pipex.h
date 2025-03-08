@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:39:17 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/08 17:48:53 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/08 18:44:17 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char			*basename(char str[]);
 char			**extract_path(char *env[]);
 char			*find_path(char *command, char **path);
 int				try_exec(char **cmd, char *env[]);
-void			create_linked_child(char *line, char *env[], int last);
+void			create_linked_child(t_pipex *pipex, char *line, char *env[], int last);
 
 /* arr_utils.c */
 
@@ -65,6 +65,6 @@ char			*create_random_str(void);
 /* error.c */
 
 int				usage(void);
-void			ft_clean(t_pipex *pipex);
+void			ft_clean_exit(t_pipex *pipex, int exit_status);
 void			ft_multifree(int n_simple, int n_arr, ...);
 #endif

@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:13:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/08 17:13:42 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/08 18:52:04 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_bool	str_is_alnum(char *str)
 
 /*
  *	@brief creates a pseudo-random string of `TMP_FILENAME_LENGTH`
- *	@brief length.
+ *	@brief length on the heap.
  *	@returns the pseudo-random string.
 */
 char	*create_random_str(void)
@@ -109,8 +109,11 @@ char	*create_random_str(void)
 	random_str = ft_calloc((TMP_FILENAME_LENGTH + 1), sizeof(char));
 	random_str[0] = '\0';
 	urandom = open("/dev/urandom", O_RDONLY);
+	if (urandom < 0)
+		return (NULL);
 	while (!random_str[0] || !str_is_alnum(random_str)
-		|| ft_strlen(random_str) != 8)
-		read(urandom, random_str, 8);
+		|| ft_strlen(random_str) != TMP_FILENAME_LENGTH)
+		read(urandom, random_str, TMP_FILENAME_LENGTH);
+	close(urandom);
 	return (concat(2, "tmp_", random_str));
 }
