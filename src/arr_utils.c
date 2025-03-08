@@ -6,12 +6,16 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:19:08 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/07 13:57:39 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/08 16:36:45 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+	@brief frees the array of strings passed as parameter.
+	@param arr the array to free.
+*/
 void	free_arr(char **arr)
 {
 	int	i;
@@ -24,6 +28,10 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
+/*
+ *	@brief prints the values of the array of strings passed as parameter.
+ *	@param arr the array to print.
+*/
 void	print_arr(char **arr)
 {
 	int	i;
@@ -61,6 +69,10 @@ int	get_arr_size(char **arr)
 	return (i);
 }
 
+/*
+ *	@brief allocates a copy of the array of strings passed as a parameter.
+ *	@param arr the array to duplicate.
+*/
 char	**duplicate_arr(char **arr)
 {
 	int		i;

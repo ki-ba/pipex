@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:01 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/07 14:48:09 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/08 17:14:19 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,41 @@ int	try_exec(char **cmd, char *env[])
 		free_arr(cmd);
 	}
 	return (1);
+}
+
+/*
+*	@brief creates a pipe, and forks the program to execute the provided `line`.
+*	@brief the child takes input from current `stdin` and puts the output to the 
+*	@brief writing end of the pipe, except when `last` is set to `true`.
+*	@brief In this case, the output goes to `stdout`.
+*	@param line the command to try to execute.
+*	@param env the environment variables as an array of strings.
+*	@param last wether this is the last command to execute or not.
+*/
+void	create_linked_child(char *line, char *env[], int last)
+{
+	char	**cmd;
+	int		child_pid;
+	int		pipe_fd[2];
+
+	if (pipe(pipe_fd) == -1)
+		exit(EXIT_FAILURE);
+	child_pid = fork();
+	if (child_pid < 0)
+		exit(EXIT_FAILURE);
+	if (child_pid == 0)
+	{
+		cmd = ft_split(line, ' ');
+		close(pipe_fd[0]);
+		if (!last)
+			dup2(pipe_fd[1], STDOUT_FILENO);
+		try_exec(cmd, env);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		close(pipe_fd[1]);
+		dup2(pipe_fd[0], STDIN_FILENO);
+		waitpid(child_pid, NULL, 0);
+	}
 }

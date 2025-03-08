@@ -6,12 +6,20 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:13:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/02/25 17:56:04 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/08 17:13:42 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+*	@brief adds specified suffix to a `s1` in place-ish.
+*	@brief copies s1, adds the suffix, then frees the previous `s1` 
+*	@brief and replaces it by the new.
+*	@param s1 pointer to the current string.
+*	@param suffix the suffix to add.
+*	@note will cause a segfault if the string was not allocated on the heap.
+*/
 void	heap_add_suffix(const char *suffix, char **s1)
 {
 	size_t	suffix_len;
@@ -38,35 +46,15 @@ void	heap_add_suffix(const char *suffix, char **s1)
 	free(s1_dup);
 }
 
-void	heap_add_prefix(const char *prefix, char *s2)
-{
-	size_t	prefix_len;
-	size_t	s2_len;
-	size_t	i;
-	char	*s2_dup;
-
-	i = 0;
-	s2_dup = ft_strdup(s2);
-	prefix_len = ft_strlen(prefix);
-	s2_len = ft_strlen(s2);
-	s2 = malloc((prefix_len + s2_len + 1) * sizeof(char));
-	if (!s2)
-		return ;
-	while (i < prefix_len)
-	{
-		s2[i] = prefix[i];
-		++i;
-	}
-	i = 0;
-	while (i < s2_len)
-	{
-		s2[prefix_len + i] = s2_dup[i];
-		++i;
-	}
-	s2[prefix_len + i] = '\0';
-	free(s2_dup);
-}
-
+/*
+*	@brief concatenates the first `n` strings passed as parameters.
+*	@brief the resulting string is allocated on the heap.
+*	@param n the number of strings to concatenate.
+*	@param ... the strings to concatenate.
+*	@returns the resulting concatenated string.
+*	@note passed strings do not need to be allocated on the heap.
+*	@note no freeing of said strings is done.
+*/
 char	*concat(size_t n, ...)
 {
 	va_list	lst;
@@ -84,4 +72,45 @@ char	*concat(size_t n, ...)
 	}
 	va_end(lst);
 	return (string);
+}
+
+/*
+ *	@brief checks whether passed string contains only 
+ *	@brief alphanumerical characters or not.
+ *	@param str the string to check.
+ *	@returns TRUE (1) if `str` is alnum,
+ *	@returns FALSE (0) otherwise.
+*/
+t_bool	str_is_alnum(char *str)
+{
+	int	i;
+
+	if (!str)
+		return (-1);
+	i = -1;
+	while (str[++i])
+	{
+		if (!ft_isalnum(str[i]))
+			return (FALSE);
+	}
+	return (TRUE);
+}
+
+/*
+ *	@brief creates a pseudo-random string of `TMP_FILENAME_LENGTH`
+ *	@brief length.
+ *	@returns the pseudo-random string.
+*/
+char	*create_random_str(void)
+{
+	int		urandom;
+	char	*random_str;
+
+	random_str = ft_calloc((TMP_FILENAME_LENGTH + 1), sizeof(char));
+	random_str[0] = '\0';
+	urandom = open("/dev/urandom", O_RDONLY);
+	while (!random_str[0] || !str_is_alnum(random_str)
+		|| ft_strlen(random_str) != 8)
+		read(urandom, random_str, 8);
+	return (concat(2, "tmp_", random_str));
 }

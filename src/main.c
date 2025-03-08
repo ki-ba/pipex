@@ -6,100 +6,29 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/07 18:04:48 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/08 17:56:31 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	ft_multifree(int n_simple, int n_arr, ...)
+/*
+ *	@brief opens the relevant infile and outfile and stores their 
+ *	@brief file descriptors in `pipex`.
+ *	@brief if a `here_doc` is used, creates a tmp file to store the data.
+ *	@param pipex the structure to store the file descriptors in.
+ *	@param argc the number of arguments the program was called with.
+ *	@param argv the arguments the program was called with.
+ *	@param here_doc whether a here document is being used or not.
+*/
+int	set_files(t_pipex *pipex, int argc, char *argv[], t_bool here_doc)
 {
-	int		i;
-	va_list	args;
-	char	*current_var;
-	char	**current_array;
-
-	i = 0;
-	while (i < n_simple)
+	if (here_doc == TRUE)
 	{
-		current_var = va_arg(args, char *);
-		free(current_var);
-	}
-	while (i < n_arr - n_simple)
-	{
-		current_array = va_arg(args, char **);
-		free_arr(current_array);
-	}
-}
-
-void	create_linked_child(char *line, char *env[], int last)
-{
-	char	**cmd;
-	int		child_pid;
-	int		pipe_fd[2];
-
-	if (pipe(pipe_fd) == -1)
-		exit(EXIT_FAILURE);
-	child_pid = fork();
-	if (child_pid < 0)
-		exit(EXIT_FAILURE);
-	if (child_pid == 0)
-	{
-		cmd = ft_split(line, ' ');
-		close(pipe_fd[0]);
-		if (!last)
-			dup2(pipe_fd[1], STDOUT_FILENO);
-		try_exec(cmd, env);
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		close(pipe_fd[1]);
-		dup2(pipe_fd[0], STDIN_FILENO);
-		waitpid(child_pid, NULL, 0);
-	}
-}
-
-int	str_is_alnum(char *str)
-{
-	int	i;
-
-	if (!str)
-		return (-1);
-	i = -1;
-	while (str[++i])
-	{
-		if (!ft_isalnum(str[i]))
-			return (0);
-	}
-	return (1);
-}
-
-char	*create_random_str(void)
-{
-	int		urandom;
-	char	*random_str;
-
-	random_str = malloc((TMP_FILENAME_LENGTH + 1) * sizeof(char));
-	random_str[0] = '\0';
-	urandom = open("/dev/urandom", O_RDONLY);
-	while (!random_str[0] || !str_is_alnum(random_str)
-		|| ft_strlen(random_str) != 8)
-		read(urandom, random_str, 8);
-	return (concat(2, "tmp_", random_str));
-}
-
-int	set_files(t_pipex *pipex, int argc, char *argv[], int here_doc)
-{
-	char	*random_filename;
-
-	if (here_doc)
-	{
-		random_filename = create_random_str();
-		pipex->infile = open(random_filename, O_CREAT | O_WRONLY, 0644);
+		pipex->tmp_filename = create_random_str();
+		pipex->infile = open(pipex->tmp_filename, O_CREAT | O_WRONLY, 0644);
 		pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND,
 				0644);
-		free(random_filename);
 	}
 	else
 	{
@@ -116,61 +45,53 @@ int	set_files(t_pipex *pipex, int argc, char *argv[], int here_doc)
 	return (0);
 }
 
-void	setup_pipex(t_pipex *pipex, int infile, int outfile, char *argv[])
-{
-	pipex->infile = infile;
-	pipex->outfile = outfile;
-	pipex->cmd = duplicate_arr(argv);
-	pipex->args = duplicate_arr(argv);
-	pipex->cmd_count = get_arr_size(argv);
-}
-
-int	usage(void)
-{
-	return (ft_printf("usage : ./pipex <[here_doc LIMITER] | infile> <cmd1> <cmd2> <outfile>\n"));
-}
-void	free_pipex(t_pipex *pipex)
-{
-	free_arr(pipex->cmd);
-	free_arr(pipex->args);
-}
-
+/*
+ *	@brief reads lines from stdin until `delimiter` is entered.
+ *	@brief writes the data to a temporary file.
+ *	@param pipex the data structure containing the file descriptor
+ *	@param of the temp file.
+ *	@param delimiter the delimiter indicating end of entry.
+*/
 void	here_doc(t_pipex *pipex, char *delimiter)
 {
 	char	*buf;
+	char	*delimiter_nl;
 
+	delimiter_nl = ft_strdup(delimiter);
+	heap_add_suffix("\n", &delimiter_nl);
 	ft_putstr_fd("here_doc>", 1);
 	buf = get_next_line(STDIN_FILENO);
-	while (buf && ft_strncmp(buf, delimiter, ft_strlen(delimiter) + 1))
+	while (buf && ft_strncmp(buf, delimiter_nl, ft_strlen(delimiter_nl)))
 	{
 		write(pipex->infile, buf, ft_strlen(buf));
-		write(pipex->infile, "\n", 1);
 		ft_putstr_fd("here_doc>", 1);
 		buf = get_next_line(STDIN_FILENO);
 	}
-	(void)pipex;
+	free(delimiter_nl);
+	close(pipex->infile);
+	pipex->infile = open(pipex->tmp_filename, O_RDONLY);
+	if (pipex->infile < 0)
+		unlink(pipex->tmp_filename);
 }
+
 int	main(int argc, char *argv[], char *env[])
 {
 	t_pipex	pipex;
 	int		here_doc_bool;
 	int		i;
 
-	here_doc_bool = ft_strncmp(argv[1], "here_doc", 9) == 0;
-	i = 2 + here_doc_bool;
-	if (here_doc_bool)
-	{
-		if (argc < 6)
-			return (usage());
-		here_doc(&pipex, argv[2]);
-	}
-	else if (argc < 5)
-		return (usage());
+	here_doc_bool = (ft_strncmp(argv[1], "here_doc", 9) == 0);
 	set_files(&pipex, argc, argv, (ft_strncmp(argv[1], "here_doc", 9) == 0));
-	dup2(pipex.outfile, STDIN_FILENO);
+	i = 2 + here_doc_bool;
+	if ((here_doc_bool && argc < 6) || argc < 5)
+		return (usage());
+	else if (here_doc_bool)
+		here_doc(&pipex, argv[2]);
+	dup2(pipex.infile, STDIN_FILENO);
 	while (i < argc - 2)
 		create_linked_child(argv[i++], env, 0);
 	dup2(pipex.outfile, STDOUT_FILENO);
 	create_linked_child(argv[argc - 2], env, 1);
+	ft_clean(&pipex);
 	return (0);
 }
