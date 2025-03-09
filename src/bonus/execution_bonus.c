@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: kiba <kiba@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:01 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/08 18:43:28 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/09 11:22:08 by kiba             ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /*
- *	@brief extracts the PATH formatted to an array of strings.
+ *	@brief extracts from env[] the PATH formatted to an array of strings.
  *	@param env the environment variable.
  *	@returns the PATH as an array of strings.
  */
@@ -56,7 +56,7 @@ char	*find_path(char *command, char **path)
 	i = 0;
 	while (path[i] && access_rval != 0)
 	{
-		current_path = concat(3, path[i], "/", c_basename);
+		current_path = ft_concat(3, path[i], "/", c_basename);
 		access_rval = access(current_path, F_OK & X_OK);
 		if (access_rval != 0)
 			free(current_path);
@@ -93,19 +93,19 @@ int	try_exec(char **cmd, char *env[])
 		cmd_tried = ft_strdup(cmd[0]);
 		path = extract_path(env);
 		cmd[0] = find_path(cmd[0], path);
-		free_arr(path);
+		ft_free_arr(path);
 		if (cmd && cmd[0])
 			execve(cmd[0], cmd, env);
 		perror(cmd_tried);
 		free(cmd_tried);
-		free_arr(cmd);
+		ft_free_arr(cmd);
 	}
 	return (1);
 }
 
 /*
 *	@brief creates a pipe, and forks the program to execute the provided `line`.
-*	@brief the child takes input from current `stdin` and puts the output to the 
+*	@brief the child takes input from current `stdin` and puts the output to the
 *	@brief writing end of the pipe, except when `last` is set to `true`.
 *	@brief In this case, the output goes to `stdout`.
 *	@param line the command to try to execute.

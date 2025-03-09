@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: kiba <kiba@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/08 18:56:48 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/09 12:26:50 by kiba             ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /*
- *	@brief opens the relevant infile and outfile and stores their 
+ *	@brief opens the relevant infile and outfile and stores their
  *	@brief file descriptors in `pipex`.
  *	@brief if a `here_doc` is used, creates a tmp file to store the data.
  *	@param pipex the structure to store the file descriptors in.
@@ -25,7 +25,7 @@ int	set_files(t_pipex *pipex, int argc, char *argv[], t_bool here_doc)
 {
 	if (here_doc == TRUE)
 	{
-		pipex->tmp_filename = create_random_str();
+		pipex->tmp_filename = ft_strdup("tmp_pipex");
 		if (!(pipex->tmp_filename))
 			ft_clean_exit(pipex, EXIT_FAILURE);
 		pipex->infile = open(pipex->tmp_filename, O_CREAT | O_WRONLY, 0644);
@@ -80,11 +80,11 @@ void	here_doc(t_pipex *pipex, char *delimiter)
 int	main(int argc, char *argv[], char *env[])
 {
 	t_pipex	pipex;
-	int		here_doc_bool;
+	t_bool	here_doc_bool;
 	int		i;
 
-	here_doc_bool = (ft_strncmp(argv[1], "here_doc", 9) == 0);
-	set_files(&pipex, argc, argv, (ft_strncmp(argv[1], "here_doc", 9) == 0));
+	here_doc_bool = (ft_strncmp(argv[1], "here_doc", 9) == 0 && BONUS);
+	set_files(&pipex, argc, argv, here_doc_bool && BONUS);
 	i = 2 + here_doc_bool;
 	if ((here_doc_bool && argc < 6) || argc < 5)
 		return (usage());
