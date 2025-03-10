@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   error_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiba <kiba@student.42lyon.fr>              +#+  +:+       +#+        */
+/*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 15:29:28 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/09 16:30:49 by kiba             ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 11:39:53 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 /*
  *	@brief prints correct usage of pipex.
@@ -18,13 +18,8 @@
 */
 int	usage(void)
 {
-	if (BONUS)
-	{
 	ft_printf("usage : ./pipex <[here_doc LIMITER])");
 	ft_printf(" | infile> <cmd1> <cmd2> <outfile>\n");
-	}
-	else
-		ft_printf("usage : ./pipex <infile> <cmd1> <cmd2> <outfile>\n");
 	return (1);
 }
 

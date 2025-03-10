@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiba <kiba@student.42lyon.fr>              +#+  +:+       +#+        */
+/*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/09 16:37:30 by kiba             ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 11:40:08 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@
  *	@param argc the number of arguments the program was called with.
  *	@param argv the arguments the program was called with.
  *	@param here_doc whether a here document is being used or not.
-*/
-int	set_files(t_pipex *pipex, int argc, char *argv[], t_bool here_doc)
+ */
+int	set_files(t_pipex *pipex, int argc, char *argv[])
 {
 	pipex->infile = open(argv[1], O_RDONLY);
-	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC,
-				0644);
+	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex->infile < 0)
 		perror(argv[1]);
 	if (pipex->outfile < 0)
@@ -38,10 +37,9 @@ int	set_files(t_pipex *pipex, int argc, char *argv[], t_bool here_doc)
 int	main(int argc, char *argv[], char *env[])
 {
 	t_pipex	pipex;
-	t_bool;
 	int		i;
 
-	set_files(&pipex, argc, argv, 0);
+	set_files(&pipex, argc, argv);
 	i = 2;
 	if (argc != 5)
 		return (usage());

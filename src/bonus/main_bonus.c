@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiba <kiba@student.42lyon.fr>              +#+  +:+       +#+        */
+/*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/09 12:26:50 by kiba             ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 11:23:47 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 /*
  *	@brief opens the relevant infile and outfile and stores their
@@ -83,8 +83,8 @@ int	main(int argc, char *argv[], char *env[])
 	t_bool	here_doc_bool;
 	int		i;
 
-	here_doc_bool = (ft_strncmp(argv[1], "here_doc", 9) == 0 && BONUS);
-	set_files(&pipex, argc, argv, here_doc_bool && BONUS);
+	here_doc_bool = (ft_strncmp(argv[1], "here_doc", 9) == 0);
+	set_files(&pipex, argc, argv, here_doc_bool);
 	i = 2 + here_doc_bool;
 	if ((here_doc_bool && argc < 6) || argc < 5)
 		return (usage());
