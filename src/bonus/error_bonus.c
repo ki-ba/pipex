@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 15:29:28 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/10 11:39:53 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 18:45:11 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	usage(void)
  *	@brief unlinks the tmp file of name specified in pipex->tmp_filename.
  *	@param pipex the pipex data.
 */
-void	ft_clean_exit(t_pipex *pipex, int exit_status)
+int	ft_clean_exit(t_pipex *pipex, int exit_status)
 {
 	if (pipex->infile > 2)
 		close(pipex->infile);

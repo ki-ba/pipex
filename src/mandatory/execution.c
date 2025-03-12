@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiba <kiba@student.42lyon.fr>              +#+  +:+       +#+        */
+/*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:01 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/09 11:22:08 by kiba             ###   ########lyon.fr   */
+/*   Updated: 2025/03/12 12:29:06 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ char	*find_path(char *command, char **path)
  *	@brief tries to execute with execve() the cmd passed as a parameter.
  *	@param cmd the command to execute with its args, as an array of strings.
  *	@param env the environment variables as array of strings.
- *	@returns nothing if the command was successfully executed, nonzero otherwise.
-*/
+ *	@returns nothing if the command was successfully executed,
+		nonzero otherwise.
+ */
 int	try_exec(char **cmd, char *env[])
 {
 	char	**path;
@@ -100,42 +101,49 @@ int	try_exec(char **cmd, char *env[])
 		free(cmd_tried);
 		ft_free_arr(cmd);
 	}
-	return (1);
+	return (127);
+}
+
+void	close_pipe(int pipe_fd[])
+{
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
 }
 
 /*
-*	@brief creates a pipe, and forks the program to execute the provided `line`.
-*	@brief the child takes input from current `stdin` and puts the output to the
-*	@brief writing end of the pipe, except when `last` is set to `true`.
-*	@brief In this case, the output goes to `stdout`.
-*	@param line the command to try to execute.
-*	@param env the environment variables as an array of strings.
-*	@param last wether this is the last command to execute or not.
-*/
-void	create_linked_child(t_pipex *pipex, char *line, char *env[], int last)
+ *	@brief creates a pipe, and forks the program to execute the provided `line`.
+ *	@brief the child takes input from current `stdin` and puts the output to the
+ *	@brief writing end of the pipe, except when `last` is set to `true`.
+ *	@brief In this case, the output goes to `stdout`.
+ *	@param line the command to try to execute.
+ *	@param env the environment variables as an array of strings.
+ *	@param last wether this is the last command to execute or not.
+ */
+pid_t	create_linked_child(t_pipex *pipex, char *line, char *env[], int last)
 {
 	char	**cmd;
 	int		child_pid;
 	int		pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
-		ft_clean_exit(pipex, EXIT_FAILURE);
+		return (ft_clean_exit(pipex, EXIT_FAILURE));
 	child_pid = fork();
 	if (child_pid < 0)
-		ft_clean_exit(pipex, EXIT_FAILURE);
+		return (ft_clean_exit(pipex, EXIT_FAILURE));
 	if (child_pid == 0)
 	{
 		cmd = ft_split(line, ' ');
-		close(pipe_fd[0]);
 		if (!last)
 			dup2(pipe_fd[1], STDOUT_FILENO);
+		close_pipe(pipe_fd);
 		try_exec(cmd, env);
-		ft_clean_exit(pipex, EXIT_FAILURE);
+		ft_clean_exit(pipex, 127);
 	}
 	else
 	{
-		close(pipe_fd[1]);
 		dup2(pipe_fd[0], STDIN_FILENO);
-		waitpid(child_pid, NULL, 0);
+		close_pipe(pipe_fd);
+		return (child_pid);
 	}
+	return (child_pid);
 }

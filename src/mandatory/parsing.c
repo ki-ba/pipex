@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:58:25 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/09 10:43:49 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 12:21:59 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ char	*basename(char str[])
 	char	*basename;
 
 	basename = NULL;
+	if (!ft_str_is_non_empty(str))
+		return (NULL);
 	last_slash = ft_strrchr(str, '/');
 	if (!last_slash)
 		last_slash = str;
