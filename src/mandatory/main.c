@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/10 16:48:08 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 13:06:45 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	main(int argc, char *argv[], char *env[])
 	if (dup_ret == -1)
 		ft_clean_exit(&pipex, start_wait(&pipex, pid1, 0));
 	pid2 = create_linked_child(&pipex, argv[argc - 2], env, 1);
+	close(STDOUT_FILENO);
 	ft_clean_exit(&pipex, start_wait(&pipex, pid1, pid2));
 	return (0);
 }
