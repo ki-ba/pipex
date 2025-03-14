@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/14 12:25:02 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 12:58:45 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ int	main(int argc, char *argv[], char *env[])
 {
 	t_pipex	pipex;
 	t_bool	here_doc_bool;
-	int		dup_ret;
 	pid_t	pid;
 	int		i;
 
@@ -115,13 +114,13 @@ int	main(int argc, char *argv[], char *env[])
 		return (usage());
 	else if (here_doc_bool)
 		here_doc(&pipex, argv[2]);
-	dup_ret = dup2(pipex.infile, STDIN_FILENO);
+	dup2(pipex.infile, STDIN_FILENO);
 	while (i < argc - 2)
 		create_linked_child(&pipex, argv[i++], env, 0);
-	dup_ret = dup2(pipex.outfile, STDOUT_FILENO);
-	if (dup_ret == -1)
+	if (dup2(pipex.outfile, STDOUT_FILENO) == -1)
 		start_wait(&pipex, 0, i, 1);
 	pid = create_linked_child(&pipex, argv[argc - 2], env, 1);
+	close(STDOUT_FILENO);
 	start_wait(&pipex, pid, ++i - here_doc_bool, 0);
 	return (0);
 }
