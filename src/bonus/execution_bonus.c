@@ -6,11 +6,11 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:01 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/14 12:48:45 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 16:13:27 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 /*
  *	@brief extracts from env[] the PATH formatted to an array of strings.

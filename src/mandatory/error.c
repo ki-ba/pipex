@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 15:29:28 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/10 14:40:06 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 16:14:44 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	ft_clean_exit(t_pipex *pipex, int exit_status)
 {
 	if (pipex)
 	{
-		if (pipex->infile > 2)
+		if (pipex->infile > -1)
 			close(pipex->infile);
-		if (pipex->outfile > 2)
+		if (pipex->outfile > -1)
 			close(pipex->outfile);
 	}
 	exit(exit_status);

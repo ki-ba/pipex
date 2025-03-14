@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/14 13:06:45 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 16:31:49 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,12 @@ int	main(int argc, char *argv[], char *env[])
 	set_files(&pipex, argc, argv);
 	i = 2;
 	dup_ret = dup2(pipex.infile, STDIN_FILENO);
+	close(pipex.infile);
 	if (dup_ret == -1)
 		ft_clean_exit(&pipex, EXIT_FAILURE);
 	pid1 = create_linked_child(&pipex, argv[i++], env, 0);
 	dup_ret = dup2(pipex.outfile, STDOUT_FILENO);
+	close(pipex.outfile);
 	if (dup_ret == -1)
 		ft_clean_exit(&pipex, start_wait(&pipex, pid1, 0));
 	pid2 = create_linked_child(&pipex, argv[argc - 2], env, 1);

@@ -6,11 +6,11 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:58:25 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/10 12:28:27 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 16:13:32 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 /*
  * @brief returns the basename of the filename passed as parameter.
