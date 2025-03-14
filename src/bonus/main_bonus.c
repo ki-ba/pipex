@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/12 15:08:13 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 12:25:02 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,22 +83,11 @@ void	here_doc(t_pipex *pipex, char *delimiter)
 void	start_wait(t_pipex *pipex, pid_t pid, int i, int def_status)
 {
 	int	status;
-	int die_pid;
-	int last_loop_diepid;
-	while (i - 3)
-	{
-		die_pid = wait(&status);
-		ft_putstr_fd("a child ended in loop\n", 2);
-		if (status == -1)
-			ft_clean_exit(pipex, EXIT_FAILURE);
-		--i;
-	}
-	last_loop_diepid = die_pid;
-	die_pid = waitpid(pid, &status, 0);
-	if (die_pid != last_loop_diepid && die_pid > -1)
-		ft_putstr_fd("killed last process!\n",2);
-	if (die_pid == -1)
-		ft_putstr_fd("didn't catch the last process...\n", 2);
+
+	(void)i;
+	waitpid(pid, &status, 0);
+	while (wait(NULL) != -1)
+		;
 	if (status == -1)
 		ft_clean_exit(pipex, EXIT_FAILURE);
 	if (WIFEXITED(status))
@@ -128,14 +117,10 @@ int	main(int argc, char *argv[], char *env[])
 		here_doc(&pipex, argv[2]);
 	dup_ret = dup2(pipex.infile, STDIN_FILENO);
 	while (i < argc - 2)
-	{
-		ft_putstr_fd("creating child\n", 2);
-		pid = create_linked_child(&pipex, argv[i++], env, 0);
-	}
+		create_linked_child(&pipex, argv[i++], env, 0);
 	dup_ret = dup2(pipex.outfile, STDOUT_FILENO);
 	if (dup_ret == -1)
 		start_wait(&pipex, 0, i, 1);
-	ft_putstr_fd("creating child\n", 2);
 	pid = create_linked_child(&pipex, argv[argc - 2], env, 1);
 	start_wait(&pipex, pid, ++i - here_doc_bool, 0);
 	return (0);

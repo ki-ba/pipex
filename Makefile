@@ -37,7 +37,7 @@ all: lib $(NAME)
 
 clean:
 	$(MAKE) -C $(P_LIB) clean
-	rm -rf $(P_OBJ)
+	rm -rf $(P_MOBJ)* $(P_BOBJ)*
 
 fclean: clean
 	$(MAKE) -C $(P_LIB) fclean

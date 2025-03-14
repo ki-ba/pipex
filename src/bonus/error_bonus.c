@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 15:29:28 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/10 18:45:11 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 12:23:20 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ int	ft_clean_exit(t_pipex *pipex, int exit_status)
 		unlink(pipex->tmp_filename);
 		free(pipex->tmp_filename);
 	}
+	if (pipex->outfile < 0)
+		exit(EXIT_FAILURE);
 	exit(exit_status);
 }

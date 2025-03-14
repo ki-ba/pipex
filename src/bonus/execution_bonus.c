@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:01 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/12 15:53:59 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 12:22:42 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ char	*find_path(char *command, char **path)
 			free(current_path);
 		++i;
 	}
+	if (access_rval != 0)
+		perror(command);
 	free(c_basename);
-	free(command);
 	if (access_rval != 0)
 		return (NULL);
 	return (current_path);
@@ -76,34 +77,6 @@ char	*find_path(char *command, char **path)
  *	@returns nothing if the command was successfully executed,
 		nonzero otherwise.
  */
-// int	try_exec(char **cmd, char *env[])
-// {
-// 	char	**path;
-// 	char	*cmd_tried;
-// 	char	*bname;
-
-// 	cmd_tried = ft_strdup(cmd[0]);
-// 	bname = basename(cmd[0]);
-// 	if (bname && ft_strncmp(bname, cmd[0], ft_strlen(bname)) != 0)
-// 		execve(cmd[0], cmd, env);
-// 	else
-// 	{
-// 		path = extract_path(env);
-// 		cmd[0] = find_path(cmd[0], path);
-// 		ft_free_arr(path);
-// 		if (cmd && cmd[0])
-// 			execve(cmd[0], cmd, env);
-// 	}
-// 	if (cmd && !cmd[0])
-// 		ft_putstr_fd(": no such file or directory\n", 2);
-// 	if (cmd_tried && ft_str_is_non_empty(cmd_tried))
-// 		perror(cmd_tried);
-// 	ft_free_arr(cmd);
-// 	free(cmd_tried);
-// 	free(bname);
-// 	return (127);
-// }
-
 int	try_exec(char *cmd[], char *env[])
 {
 	char	**path;
@@ -118,12 +91,10 @@ int	try_exec(char *cmd[], char *env[])
 	{
 		path = extract_path(env);
 		path_to_bin = find_path(cmd[0], path);
-		execve(path_to_bin, cmd, env);
+		ft_free_arr(path);
+		if (path_to_bin)
+			execve(path_to_bin, cmd, env);
 	}
-	if (path_to_bin)
-		perror(path_to_bin);
-	else
-		ft_putstr_fd(" : No such file or directory\n", 2);
 	ft_free_arr(cmd);
 	free(bname);
 	free(path_to_bin);
@@ -162,7 +133,7 @@ pid_t	create_linked_child(t_pipex *pipex, char *line, char *env[], int last)
 		if (!last)
 			dup2(pipe_fd[1], STDOUT_FILENO);
 		close_pipe(pipe_fd);
-		ft_clean_exit(pipex, try_exec(cmd, env));
+		return (ft_clean_exit(pipex, try_exec(cmd, env)));
 	}
 	else
 	{
