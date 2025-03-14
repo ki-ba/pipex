@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:47:53 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/14 12:58:45 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 17:10:57 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ int	main(int argc, char *argv[], char *env[])
 
 	if (argc < 5)
 		return (usage());
-	pid = 0;
 	here_doc_bool = (argc > 1 && ft_strncmp(argv[1], "here_doc", 9) == 0);
 	set_files(&pipex, argc, argv, here_doc_bool);
 	i = 2 + here_doc_bool;
@@ -115,10 +114,12 @@ int	main(int argc, char *argv[], char *env[])
 	else if (here_doc_bool)
 		here_doc(&pipex, argv[2]);
 	dup2(pipex.infile, STDIN_FILENO);
+	close(pipex.infile);
 	while (i < argc - 2)
 		create_linked_child(&pipex, argv[i++], env, 0);
 	if (dup2(pipex.outfile, STDOUT_FILENO) == -1)
 		start_wait(&pipex, 0, i, 1);
+	close(pipex.outfile);
 	pid = create_linked_child(&pipex, argv[argc - 2], env, 1);
 	close(STDOUT_FILENO);
 	start_wait(&pipex, pid, ++i - here_doc_bool, 0);

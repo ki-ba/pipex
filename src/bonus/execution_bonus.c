@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:01 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/14 16:13:27 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/14 17:07:48 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,15 +131,15 @@ pid_t	create_linked_child(t_pipex *pipex, char *line, char *env[], int last)
 	{
 		cmd = ft_split(line, ' ');
 		if (!last)
+		{
 			dup2(pipe_fd[1], STDOUT_FILENO);
+			close(pipex->outfile);
+		}
 		close_pipe(pipe_fd);
 		return (ft_clean_exit(pipex, try_exec(cmd, env)));
 	}
 	else
-	{
 		dup2(pipe_fd[0], STDIN_FILENO);
-		close_pipe(pipe_fd);
-		return (child_pid);
-	}
+	close_pipe(pipe_fd);
 	return (child_pid);
 }
