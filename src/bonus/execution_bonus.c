@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+#include <unistd.h>
 
 /*
  *	@brief extracts from env[] the PATH formatted to an array of strings.
@@ -132,14 +133,14 @@ pid_t	create_linked_child(t_pipex *pipex, char *line, char *env[], int last)
 		cmd = ft_split(line, ' ');
 		if (!last)
 		{
-			dup2(pipe_fd[1], STDOUT_FILENO);
-			close(pipex->outfile);
+			cdup2(pipe_fd[1], STDOUT_FILENO);
+			if(pipex->outfile > -1) {close(pipex->outfile);}
 		}
 		close_pipe(pipe_fd);
 		return (ft_clean_exit(pipex, try_exec(cmd, env)));
 	}
 	else
-		dup2(pipe_fd[0], STDIN_FILENO);
+		cdup2(pipe_fd[0], STDIN_FILENO);
 	close_pipe(pipe_fd);
 	return (child_pid);
 }

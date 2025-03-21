@@ -49,6 +49,15 @@ void	set_files(t_pipex *pipex, int argc, char *argv[], t_bool here_doc)
 		perror(argv[argc - 1]);
 }
 
+int	cdup2(int fd_from, int fd_to)
+{
+	int	ret_val;
+
+	ret_val = dup2(fd_from, fd_to);
+	if(fd_from > -1)
+		close(fd_from);
+	return (ret_val);
+}	
 /*
  *	@brief reads lines from stdin until `delimiter` is entered.
  *	@brief writes the data to a temporary file.
@@ -103,7 +112,6 @@ int	main(int argc, char *argv[], char *env[])
 	t_bool	here_doc_bool;
 	pid_t	pid;
 	int		i;
-
 	if (argc < 5)
 		return (usage());
 	here_doc_bool = (argc > 1 && ft_strncmp(argv[1], "here_doc", 9) == 0);
@@ -113,15 +121,14 @@ int	main(int argc, char *argv[], char *env[])
 		return (usage());
 	else if (here_doc_bool)
 		here_doc(&pipex, argv[2]);
-	dup2(pipex.infile, STDIN_FILENO);
-	close(pipex.infile);
+	cdup2(pipex.infile, STDIN_FILENO);
 	while (i < argc - 2)
 		create_linked_child(&pipex, argv[i++], env, 0);
-	if (dup2(pipex.outfile, STDOUT_FILENO) == -1)
+	if (cdup2(pipex.outfile, STDOUT_FILENO) == -1)
 		start_wait(&pipex, 0, i, 1);
 	close(pipex.outfile);
 	pid = create_linked_child(&pipex, argv[argc - 2], env, 1);
-	close(STDOUT_FILENO);
+	close(0);
 	start_wait(&pipex, pid, ++i - here_doc_bool, 0);
 	return (0);
 }

@@ -46,4 +46,6 @@ pid_t					create_linked_child(t_pipex *pipex, char *line,
 int						usage(void);
 int						ft_clean_exit(t_pipex *pipex, int exit_status);
 
+/* main.c */
+int	cdup2(int fd_from, int fd_to);
 #endif
