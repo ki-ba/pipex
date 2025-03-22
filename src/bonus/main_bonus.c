@@ -54,10 +54,11 @@ int	cdup2(int fd_from, int fd_to)
 	int	ret_val;
 
 	ret_val = dup2(fd_from, fd_to);
-	if(fd_from > -1)
+	if (fd_from > -1)
 		close(fd_from);
 	return (ret_val);
-}	
+}
+
 /*
  *	@brief reads lines from stdin until `delimiter` is entered.
  *	@brief writes the data to a temporary file.
@@ -112,6 +113,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_bool	here_doc_bool;
 	pid_t	pid;
 	int		i;
+
 	if (argc < 5)
 		return (usage());
 	here_doc_bool = (argc > 1 && ft_strncmp(argv[1], "here_doc", 9) == 0);

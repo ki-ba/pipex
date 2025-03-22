@@ -34,9 +34,9 @@ int	ft_clean_exit(t_pipex *pipex, int exit_status)
 			close(pipex->infile);
 		if (pipex->outfile > -1)
 			close(pipex->outfile);
-		if(pipex->infile != 0)
+		if (pipex->infile != 0)
 			close(0);
-		if(pipex->outfile != 1)
+		if (pipex->outfile != 1)
 			close(1);
 		close(2);
 		if (pipex->outfile < 0)
