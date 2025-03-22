@@ -1,8 +1,8 @@
 NAME = pipex
+BONUS_NAME = pipex_bonus
 CC = cc
 FLAGS = -Werror -Wall -Wextra -g
 DEBUG_FLAGS = -Wall -Wextra -g -fsanitize=address
-BONUS_FLAGS = -DBONUS=1
 ### PATHS
 
 P_LIB = libft/
@@ -41,7 +41,7 @@ clean:
 
 fclean: clean
 	$(MAKE) -C $(P_LIB) fclean
-	rm -rf $(NAME)
+	rm -rf $(NAME) $(BONUS_NAME)
 
 re: fclean
 	$(MAKE) all
@@ -53,8 +53,10 @@ debug:
 	$(MAKE) re FLAGS="$(DEBUG_FLAGS)"
 	$(MAKE) clean
 
-bonus: $(BONUS_OBJ) $(P_LIB)libft.a
-	$(CC) $(FLAGS) $(BONUS_FLAGS) $(BONUS_OBJ) -L$(P_LIB) -lft -o $(NAME)
+bonus: $(BONUS_NAME)
+
+$(BONUS_NAME): $(BONUS_OBJ) $(P_LIB)libft.a
+	$(CC) $(FLAGS) $(BONUS_OBJ) -L$(P_LIB) -lft -o $(BONUS_NAME)
 
 $(NAME): $(OBJ) $(P_LIB)libft.a
 	$(CC) $(FLAGS) $(OBJ) -L$(P_LIB) -lft -o $@
