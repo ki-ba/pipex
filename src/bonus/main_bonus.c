@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "pipex_bonus.h"
 
 /*
@@ -26,7 +27,8 @@ void	set_files(t_pipex *pipex, int argc, char *argv[], t_bool here_doc)
 	pipex->tmp_filename = NULL;
 	if (here_doc == TRUE)
 	{
-		pipex->tmp_filename = ft_strdup("tmp_pipex");
+		pipex->tmp_filename = create_random_str(8);
+		heap_add_suffix("_tmp", &(pipex->tmp_filename));
 		if (!(pipex->tmp_filename))
 			ft_clean_exit(pipex, EXIT_FAILURE);
 		pipex->infile = open(pipex->tmp_filename, O_CREAT | O_WRONLY, 0644);
