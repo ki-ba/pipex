@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "pipex_bonus.h"
 #include <unistd.h>
 
@@ -95,6 +96,8 @@ int	try_exec(char *cmd[], char *env[])
 		ft_free_arr(path);
 		if (path_to_bin)
 			execve(path_to_bin, cmd, env);
+		if (cmd && ft_strlen(cmd[0]) == 0)
+			ft_putstr_fd("No such file or directory\n", 2);
 	}
 	ft_free_arr(cmd);
 	free(bname);
