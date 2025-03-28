@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "pipex.h"
 
 /*
@@ -83,14 +84,14 @@ int	try_exec(char **cmd, char *env[])
 	char	*c_basename;
 
 	c_basename = basename(cmd[0]);
-	if (ft_strncmp(c_basename, cmd[0], ft_strlen(c_basename)) != 0)
+	if (!cmd[0] || ft_strncmp(c_basename, cmd[0], ft_strlen(c_basename)) != 0)
 	{
-		execve(cmd[0], cmd, env);
-		free(c_basename);
+		if (cmd[0])
+			execve(cmd[0], cmd, env);
+		ft_putstr_fd("No such file or directory\n", 2);
 	}
 	else
 	{
-		free(c_basename);
 		cmd_tried = ft_strdup(cmd[0]);
 		path = extract_path(env);
 		cmd[0] = find_path(cmd[0], path);
@@ -99,8 +100,9 @@ int	try_exec(char **cmd, char *env[])
 			execve(cmd[0], cmd, env);
 		perror(cmd_tried);
 		free(cmd_tried);
-		ft_free_arr(cmd);
 	}
+	free(c_basename);
+	ft_free_arr(cmd);
 	return (127);
 }
 
