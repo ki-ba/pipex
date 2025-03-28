@@ -44,3 +44,10 @@ int	ft_clean_exit(t_pipex *pipex, int exit_status)
 	}
 	exit(exit_status);
 }
+
+int	sclose(int fd)
+{
+	if (fd > -1)
+		return (close(fd));
+	return (1);
+}

@@ -138,7 +138,7 @@ pid_t	create_linked_child(t_pipex *pipex, char *line, char *env[], int last)
 		if (!last)
 		{
 			dup2(pipe_fd[1], STDOUT_FILENO);
-			close(pipex->outfile);
+			sclose(pipex->outfile);
 		}
 		close_pipe(pipe_fd);
 		ft_clean_exit(pipex, try_exec(cmd, env));

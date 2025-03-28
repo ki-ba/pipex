@@ -44,5 +44,5 @@ pid_t		create_linked_child(t_pipex *pipex, char *line, char *env[],
 
 int			usage(void);
 int			ft_clean_exit(t_pipex *pipex, int exit_status);
-
+int			sclose(int fd);
 #endif
